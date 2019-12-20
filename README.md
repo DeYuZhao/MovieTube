@@ -1,4 +1,5 @@
 # movietube_front
+敏捷迭代一MovieTube项目前端
 
 ## Project setup
 ```
@@ -21,4 +22,4 @@ npm run lint
 ```
 
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
