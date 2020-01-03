@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    
     <router-view/>
   </div>
 </template>
@@ -11,10 +12,9 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100%;
   width: 100%;
-  padding: 110px 0 144px;
-  background: #f0f2f5 url('assets/background.svg') no-repeat 50%;
+  padding: 20px 0 144px;
+  background: #f0f2f5 url('assets/background.svg') repeat 100%;
 }
 
 #nav {
