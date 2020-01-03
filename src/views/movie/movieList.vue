@@ -10,7 +10,7 @@
       </div>
     </div>
     
-    <a-pagination showQuickJumper total=20 :defaultCurrent="1" ></a-pagination>
+    <a-pagination showQuickJumper :total="movieList.totalElements" :defaultCurrent="1" @change="pageChange"></a-pagination>
   </div>
 </template>
 
@@ -40,9 +40,20 @@ export default {
     ])
   },
   methods: {
+    ...mapMutations([
+      'set_movieListParams'
+    ]),
     ...mapActions([
       'getMovieList'
-    ])
+    ]),
+
+    pageChange(page, pageSize) {
+      const data = {
+        pageNo: page
+      }
+      this.$store.commit('set_movieListParams', data)
+      this.getMovieList()
+    }
   }
 }
 </script>

@@ -10,7 +10,7 @@ const movie = {
         
         movieListParams: {
             pageNo: 1,
-            pageSize: 30
+            pageSize: 20
         }
     },
     mutations: {
@@ -30,9 +30,8 @@ const movie = {
         getMovieList: async({commit, state}) => {
             const res = await getMovieListAPI(state.movieListParams)
             if(res){
-                
                 commit('set_movieList', res)
-                console.log(res)
+                console.log(res.content)
             }
         }
     }
