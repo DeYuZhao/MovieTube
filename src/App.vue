@@ -10,10 +10,9 @@
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   width: 100%;
-  padding: 20px 0 144px;
+  padding: 20px 150px 144px;
   background: #f0f2f5 url('assets/background.svg') repeat 100%;
 }
 

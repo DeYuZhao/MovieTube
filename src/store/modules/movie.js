@@ -1,5 +1,6 @@
 import {
-    getMovieListAPI
+    getMovieListAPI,
+    getByMovieIdAPI
 } from '@/api/movie'
 
 const movie = {
@@ -11,7 +12,9 @@ const movie = {
         movieListParams: {
             pageNo: 1,
             pageSize: 20
-        }
+        },
+
+        currentMovieId: ''
     },
     mutations: {
         set_movieList: function(state, data) {
@@ -32,6 +35,12 @@ const movie = {
             if(res){
                 commit('set_movieList', res)
                 console.log(res.content)
+            }
+        },
+        getByMovieId: async({commit, state}) => {
+            const res = await getByMovieIdAPI(state.currentMovieId)
+            if(res){
+                
             }
         }
     }

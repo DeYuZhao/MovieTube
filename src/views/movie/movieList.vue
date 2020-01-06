@@ -59,7 +59,7 @@ export default {
 </script>
 <style scoped lang="less">
   .movieList {
-    padding: 0 150px;
+    text-align: center;
     .emptyBox {
       height: 0;
       margin: 10px 20px

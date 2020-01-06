@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/user/login.vue'
 import List from '../views/movie/movieList'
+import movie from '../views/movie/movieDetail'
 Vue.use(VueRouter)
 
 const routes = [
@@ -16,10 +17,11 @@ const routes = [
     name: 'login',
     component: Login
   },
-  // {
-  //   path: '/MovieTube/movie',
-  //   name:''
-  // }
+  {
+    path: '/MovieTube/movie',
+    name: 'movie',
+    component: movie
+  }
 
 ]
 
