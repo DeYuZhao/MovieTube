@@ -1,17 +1,23 @@
 <template>
-    <a-card hoverable class="movieCard ant-col-xs-8 ant-col-lg-6 ant-col-xxl-4">
+
+  <a-card hoverable class="movieCard ant-col-xs-7 ant-col-lg-5 ant-col-xxl-3">
     <img
       alt="example"
       :src="movie.cover"
       slot="cover"
       referrerPolicy="no-referrer"
     />
-    <a-card-meta :title="movie.title">
-      <template slot="description"
-        ></template
-      >
+    <a-tooltip :title="movie.title" placement="top">
+      <a-card-meta :title="movie.title">
+      <template slot="description">
+        <a-rate style="font-size: 15px" :value="movie.rate/2" disabled/> {{movie.rate}}分
+      </template>
     </a-card-meta>
+    </a-tooltip>
+
   </a-card>
+
+    
 </template>
 <script>
 export default {
@@ -28,6 +34,17 @@ export default {
 </script>
 <style scoped lang="less">
     .movieCard {
-        margin: 10px 20px
+        margin: 10px 10px;
+        img {
+          height: 250px;
+        }
     }
+</style>
+
+<style lang="less">
+.movieCard{
+  .ant-card-body{
+    padding: 12px
+  }
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
     <a-list itemLayout="vertical" size="large" :pagination="pagination" :dataSource="listData">
         <div slot="footer"><b>ant design vue</b> footer part</div>
-        <a-list-item slot="renderItem" slot-scope="item, index" key="item.title">
+        <a-list-item slot="renderItem" slot-scope="item" key="item.title">
         <template slot="actions" v-for="{type, text} in actions">
             <span :key="type">
             <a-icon :type="type" style="margin-right: 8px" />

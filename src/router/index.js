@@ -6,6 +6,11 @@ import movie from '../views/movie/movieDetail'
 Vue.use(VueRouter)
 
 const routes = [
+
+  {
+    path: '/',
+    redirect: {name: 'list'}
+  },
    
   {
     path: '/MovieTube/list',
