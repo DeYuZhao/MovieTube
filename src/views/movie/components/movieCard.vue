@@ -1,5 +1,4 @@
 <template>
-
   <a-card hoverable class="movieCard ant-col-xs-7 ant-col-lg-5 ant-col-xxl-3">
     <img
       alt="example"
@@ -14,10 +13,7 @@
       </template>
     </a-card-meta>
     </a-tooltip>
-
   </a-card>
-
-    
 </template>
 <script>
 export default {

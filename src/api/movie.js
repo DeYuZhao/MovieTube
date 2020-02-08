@@ -1,22 +1,54 @@
 import { axios } from '@/utils/request'
 
 const api = {
-    getMovieList: '/api/movie/listByPage', //GET
-    getByMovieId: 'api/movie/getByMovieId', //GET
+    moviePre: 'api/movie',
 }
 
-export function getMovieListAPI(data){
+export function getMovieListAPI(params){
     return axios({
-        url: api.getMovieList,
+        url: `${api.moviePre}/listByPage`,
         method: 'GET',
-        data
+        params
     })
 }
 
-export function getByMovieIdAPI(parameter){
+export function getByMovieIdAPI(params){
     return axios({
-        url: api.getByMovieId,
+        url: `${api.moviePre}/getByMovieId`,
         method: 'GET',
-        params: parameter
+        params
+    })
+}
+
+//获取电影数量
+export function getCountOfMoviesAPI(params){
+    return axios({
+        url: `${api.moviePre}/getCountOfMovies`,
+        method: 'GET',
+        params
+    })
+}
+//根据演员姓名搜索
+export function listByCastNameAPI(params){
+    return axios({
+        url: `${api.moviePre}/listByCastName`,
+        method: 'GET',
+        params
+    })
+}
+//根据导演姓名搜索
+export function listByKeywordAPI(params){
+    return axios({
+        url: `${api.moviePre}/listByKeyword`,
+        method: 'GET',
+        params
+    })
+}
+//根据电影名称搜索
+export function listByMovieName(params){
+    return axios({
+        url: `${api.moviePre}/listByMovieName`,
+        method: 'GET',
+        params
     })
 }

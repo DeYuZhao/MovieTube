@@ -1,22 +1,26 @@
-import {axios} from '@/utils/request'
+import { axios } from '@/utils/request'
 
 const api = {
-    login: 'api/user/login', //登录api
-    register: 'api/user/resgister'
+    userPre: 'api/user'
 }
-
 export function loginAPI(data){
     return axios({
-        url:api.login,
+        url:`${api.userPre}/login`,
         method: 'POST',
         data
     })
 }
-
 export function registerAPI(data){
     return axios({
-        url:api.register,
+        url: `${api.userPre}/register`,
         method: 'POST',
         data
+    })
+}
+export function getUserInfoAPI(params){
+    return axios({
+        url: `${api.userPre}/getUserInfo`,
+        method: 'GET',
+        params
     })
 }

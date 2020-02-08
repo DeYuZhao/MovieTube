@@ -69,6 +69,9 @@ service.interceptors.response.use((response) => {
       break
     case 404:
       return false
+    case 401: 
+      window.location.href="localhost:8080/MovieTube/user/login"
+      break
     default:
       if(response.data.message){
         notification.warning({

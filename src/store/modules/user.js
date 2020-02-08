@@ -1,9 +1,9 @@
-import notification from 'ant-design-vue'
 import Vue from 'vue'
 import router from '@/router'
 import {
     loginAPI,
-    registerAPI
+    registerAPI,
+    getUserInfoAPI
 } from '@/api/user'
 
 
@@ -27,6 +27,7 @@ const user = {
             if(res){
                 Vue.ls.set('ACCESS_TOKEN', res, 7 * 24 * 60 * 60 * 1000)
                 commit('set_token', res)
+
                 router.push('/MovieTube/list')
             }
         }

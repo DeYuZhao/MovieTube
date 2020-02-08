@@ -1,12 +1,11 @@
 <template>
   <div class="movieList">
-    <Header></Header>
     <a-divider></a-divider>
     <a-layout>
       <a-spin :spinning="!movieList.content">
         <a-layout-content>
          <div class="card-wrapper">
-          <MovieCard :movie="item" v-for="item in movieList.content" :key="item.index"></MovieCard>
+          <MovieCard :movie="item" v-for="item in movieList.content" :key="item.index" @click.native="jumpToDetails(item.id)"></MovieCard>
           <div v-for="item in emptyBox" :key="item.name" class="emptyBox ant-col-xs-8 ant-col-lg-6 ant-col-xxl-4">
 
           </div>
@@ -19,22 +18,20 @@
         <h3 :style="{ marginBottom: '16px' }">一周排行榜</h3>
         <a-list :dataSource="data">
           <a-list-item></a-list-item>
-          <a-list-item slot="renderItem" slot-scope="item">{{item}}</a-list-item>
+          <a-list-item slot="renderItem" slot-scope="item">{{ item }}</a-list-item>
         </a-list>
       </a-layout-sider>
-      
     </a-layout>
 
     <a-row>
-     
+
     </a-row>
 
   </div>
 </template>
 
 <script>
-import Header from '@/components/header'
-import MovieCard from '@/components/movie/movieCard'
+import MovieCard from './components/movieCard'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 const data = [
     'Racing car sprays burning fuel into crowd.',
@@ -51,7 +48,6 @@ const data = [
 export default {
   name: 'home',
   components: {
-    Header,
     MovieCard
   },
   data(){
@@ -60,12 +56,13 @@ export default {
       emptyBox: [{ name: 'box1' }, { name: 'box2'}, {name: 'box3'}, {name:'box4'}]
     }
   },
-  mounted() {
-    this.getMovieList()
+  async mounted() {
+    await this.getMovieList()
   },
   computed: {
     ...mapGetters([
-      'movieList'
+      'movieList',
+      'token'
     ])
   },
   methods: {
@@ -82,6 +79,9 @@ export default {
       }
       this.$store.commit('set_movieListParams', data)
       this.getMovieList()
+    },
+    jumpToDetails(id){
+      this.$router.push({ name: 'movie', params: { movieId: id }})
     }
   }
 }

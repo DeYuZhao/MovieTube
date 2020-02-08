@@ -23,7 +23,7 @@ const routes = [
     component: Login
   },
   {
-    path: '/MovieTube/movie',
+    path: '/MovieTube/movie/:movieId',
     name: 'movie',
     component: movie
   }
