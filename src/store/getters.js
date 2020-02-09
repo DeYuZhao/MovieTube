@@ -7,7 +7,9 @@ const getters = {
   total_comments: state => state.comment.total_comments,
   moreReply: state => state.comment.moreReply,
   commentLoading: state => state.comment.commentLoading,
-  replyLoading: state => state.comment.replyLoading
+  replyLoading: state => state.comment.replyLoading,
+  newComment: state => state.comment.newComment,
+  newReply: state => state.comment.newReply
   }
   
   export default getters

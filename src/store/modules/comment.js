@@ -8,6 +8,7 @@ import {
     listUserReceiveComments
 } from '@/api/comment'
 import store from '@/store'
+import { message } from 'ant-design-vue'
 const comment = {
     state: {
         commentList: [
@@ -17,8 +18,29 @@ const comment = {
         moreReply: {
             comment_username: '',
             comment_content: '',
-            reply:[]
+            reply:[],
+            total:0
         },
+        newComment: {
+            content: '',
+            createTime: '',
+            fromUserId: 1,
+            id:'',
+            movieId:'',
+            parentCommentId: -1,
+            rootCommentId: -1,
+            toUserId: -1
+          },
+        newReply: {
+            content: '',
+            createTime: '',
+            fromUserId: 1,
+            id:'',
+            movieId:'',
+            parentCommentId: '',
+            rootCommentId: '',
+            toUserId: ''
+          },
         commentLoading: true,
         replyLoading: true
     },
@@ -40,6 +62,18 @@ const comment = {
         },
         set_replyLoading: function(state){
             state.replyLoading = false
+        },
+        set_newComment: function(state, data){
+            state.newComment = {
+                ...state.newComment,
+                ...data
+            }
+        },
+        set_newReply: function(state, data){
+            state.newReply = {
+                ...state.newReply,
+                ...data
+            }
         }
     },
     actions: {
@@ -64,10 +98,28 @@ const comment = {
             })
             if(res){
                 commit('set_moreReply', {
-                    reply: res.content
+                    reply: res.content,
+                    total: res.totalElements
                 })
                 commit('set_replyLoading')
             }
+        },
+        insertComment: async({ state, commit, dispatch }) => {
+            commit('set_newComment',{
+                movieId: store.state.movie.currentMovieId
+            })
+            const res = await insertCommentAPI(state.newComment)
+            dispatch('getRootComment')
+            message.success('发表成功')
+            if(res){
+                
+            }
+        },
+        insertReply: async({ state, commit, dispatch }) => {
+            commit('set_newReply', {
+                movieId: store.state.movie.currentMovieId
+            })
+            const res = await insertCommentAPI(state.newReply)
         }
     }
 }

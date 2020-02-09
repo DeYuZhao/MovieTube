@@ -2,12 +2,14 @@
   <div class="movieList">
     <a-divider></a-divider>
     <a-layout>
+      
       <a-spin :spinning="!movieList.content">
         <a-layout-content>
-         <div class="card-wrapper">
-          <MovieCard :movie="item" v-for="item in movieList.content" :key="item.index" @click.native="jumpToDetails(item.id)"></MovieCard>
-          <div v-for="item in emptyBox" :key="item.name" class="emptyBox ant-col-xs-8 ant-col-lg-6 ant-col-xxl-4">
+          <TagSelector></TagSelector>
 
+          <div class="card-wrapper">
+            <MovieCard :movie="item" v-for="item in movieList.content" :key="item.index" @click.native="jumpToDetails(item.id)"></MovieCard>
+            <div v-for="item in emptyBox" :key="item.name" class="emptyBox ant-col-xs-8 ant-col-lg-6 ant-col-xxl-4">
           </div>
           <a-pagination showQuickJumper :total="movieList.totalElements" :defaultCurrent="1" @change="pageChange"></a-pagination>
         </div>
@@ -32,6 +34,7 @@
 
 <script>
 import MovieCard from './components/movieCard'
+import TagSelector from './components/tagSelector'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 const data = [
     'Racing car sprays burning fuel into crowd.',
@@ -48,7 +51,8 @@ const data = [
 export default {
   name: 'home',
   components: {
-    MovieCard
+    MovieCard,
+    TagSelector
   },
   data(){
     return{
@@ -98,7 +102,6 @@ export default {
       justify-content: space-around;
       flex-wrap: wrap;
       flex-grow: 3;
-      padding: 20px 0
     }
     .card-wrapper .card-item {
       margin: 30px;

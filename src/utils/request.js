@@ -58,7 +58,6 @@ service.interceptors.response.use((response) => {
       switch (response.data.returnCode) {
         case 200:
           return response.data.data
-        
         default:
           if(response.data.message){
             notification.warning({
