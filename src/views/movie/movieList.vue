@@ -1,12 +1,11 @@
 <template>
   <div class="movieList">
+    <Header></Header>
     <a-divider></a-divider>
     <a-layout>
-      
       <a-spin :spinning="!movieList.content">
         <a-layout-content>
-          <TagSelector></TagSelector>
-
+          <TagSelector :tagList="tagList"></TagSelector>
           <div class="card-wrapper">
             <MovieCard :movie="item" v-for="item in movieList.content" :key="item.index" @click.native="jumpToDetails(item.id)"></MovieCard>
             <div v-for="item in emptyBox" :key="item.name" class="emptyBox ant-col-xs-8 ant-col-lg-6 ant-col-xxl-4">
@@ -24,15 +23,13 @@
         </a-list>
       </a-layout-sider>
     </a-layout>
-
     <a-row>
-
     </a-row>
-
   </div>
 </template>
 
 <script>
+import Header from '@/components/header'
 import MovieCard from './components/movieCard'
 import TagSelector from './components/tagSelector'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
@@ -51,6 +48,7 @@ const data = [
 export default {
   name: 'home',
   components: {
+    Header,
     MovieCard,
     TagSelector
   },
@@ -61,11 +59,12 @@ export default {
     }
   },
   async mounted() {
-    await this.getMovieList()
+    await this.getTagsMap()
   },
   computed: {
     ...mapGetters([
       'movieList',
+      'tagList',
       'token'
     ])
   },
@@ -74,7 +73,7 @@ export default {
       'set_movieListParams'
     ]),
     ...mapActions([
-      'getMovieList'
+      'getTagsMap'
     ]),
 
     pageChange(page, pageSize) {

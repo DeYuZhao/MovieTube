@@ -1,5 +1,6 @@
 <template>
     <a-layout-content>
+        <Header></Header>
         <a-divider></a-divider>
         <movieDetailCard :movieInfo="currentMovieInfo"></movieDetailCard>
         <a-divider></a-divider>
@@ -7,12 +8,14 @@
     </a-layout-content>
 </template>
 <script>
+import Header from '@/components/header'
 import movieDetailCard from './components/movieDetailCard'
 import comment from './components/comment'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
     name: 'movieDetail',
     components: {
+        Header,
         comment,
         movieDetailCard
     },

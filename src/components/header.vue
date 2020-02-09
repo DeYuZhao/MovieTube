@@ -3,10 +3,8 @@
         <div class="label">
             <img src="@/assets/logo.svg" class="logo" alt="logo">
             <span class="title">Movie Tube</span>
-            <a-input-search class="search" aria-placeholder="搜索电影..." size="large"></a-input-search>
+            <a-input-search class="search" aria-placeholder="搜索电影..." size="large" @search="onSearch" enterButton></a-input-search>
         </div>
-        
-
         <div class="logout">
             <a-dropdown placement="bottomCenter">
                 <a>
@@ -33,11 +31,25 @@
     
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
     name: '',
     data() {
         return {
 
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'keyword'
+        ])
+    },
+    methods: {
+        ...mapActions([
+            'searchMovieList'
+        ]),
+        onSearch() {
+            this.searchMovieList()
         }
     }
 }

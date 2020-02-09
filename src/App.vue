@@ -1,16 +1,15 @@
 <template>
   <div id="app">
-    <Header></Header>
+    
     <transition name="fade-transform" mode="out-in">
       <router-view/>
     </transition>
   </div>
 </template>
 <script>
-import Header from '@/components/header'
 export default {
   components: {
-    Header
+    
   }
 }
 </script>

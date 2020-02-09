@@ -109,10 +109,13 @@ const comment = {
                 movieId: store.state.movie.currentMovieId
             })
             const res = await insertCommentAPI(state.newComment)
-            dispatch('getRootComment')
-            message.success('发表成功')
+            
             if(res){
-                
+                dispatch('getRootComment')
+                commit('set_newComment',{
+                    content: ''
+                })
+                message.success('发表成功')
             }
         },
         insertReply: async({ state, commit, dispatch }) => {

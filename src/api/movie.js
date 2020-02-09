@@ -1,12 +1,12 @@
 import { axios } from '@/utils/request'
 
 const api = {
-    moviePre: 'api/movie',
+    moviePre: 'api/movieTag',
 }
 
 export function getMovieListAPI(params){
     return axios({
-        url: `${api.moviePre}/listByPage`,
+        url: `${api.moviePre}/listByTag`,
         method: 'GET',
         params
     })
