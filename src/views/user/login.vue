@@ -145,7 +145,7 @@ export default {
 
       init() {
         if(this.token){
-          this.$router.push('/MovieTube/list')
+          this.$router.push('/movie/list')
         }
       },
     // handler

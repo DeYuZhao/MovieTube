@@ -41,15 +41,14 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'keyword'
         ])
     },
     methods: {
         ...mapActions([
             'searchMovieList'
         ]),
-        onSearch() {
-            this.searchMovieList()
+        onSearch(v) {
+            this.$router.push({ name: 'search', query: { keyword: v } })
         }
     }
 }

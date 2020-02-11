@@ -21,17 +21,17 @@ const movie = {
         movieListParams: {
             tag: 'hot',
             pageNo: 1,
-            pageSize: 10
+            pageSize: 12
         },
-        currentTag: '',
+        currentTag: 'hot',
         currentMovieId: '',
         currentMovieInfo: {
 
         },
-        searchMovieListParams: {
+        searchParams: {
             keyword: '',
             pageNo: 1,
-            pageSize: 10
+            pageSize: 12
         }
     },
     mutations: {
@@ -47,6 +47,9 @@ const movie = {
                 ...data
             }
         },
+        set_currentTag: function(state, data) {
+            state.currentTag = data
+        },
         set_currentMovieId: function(state, data) {
             state.currentMovieId = data
         },
@@ -56,7 +59,7 @@ const movie = {
                 ...data
             }
         },
-        set_searchMovieListParams: function(state, data) {
+        set_searchParams: function(state, data) {
             state.searchMovieListParams = {
                 ...state.searchMovieListParams,
                 ...data
@@ -67,6 +70,9 @@ const movie = {
 
     actions: {
         getMovieList: async({commit, state}) => {
+            commit('set_movieListParams',{
+                tag: state.currentTag
+            })
             const res = await getMovieListAPI(state.movieListParams)
             if(res){
                 commit('set_movieList', res)
@@ -85,7 +91,6 @@ const movie = {
             const res = await getTagsMapAPI()
             if(res){
                 commit('set_tagList', res)
-                console.log(res)
                 dispatch('getMovieList')
             }
         },

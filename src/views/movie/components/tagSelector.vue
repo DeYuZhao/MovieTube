@@ -1,23 +1,23 @@
 <template>
     <div class="selector-wrapper">
         <a-tabs defaultActiveKey="0">
-            <a-tab-pane tab="默认" key="0" >
-                <a-radio-group defaultValue="a" buttonStyle="solid">
+            <a-tab-pane tab="默认" key="0">
+                <a-radio-group defaultValue="hot" buttonStyle="solid" @change="chooseTag">
                     <a-radio-button :value="item.value" class="item" v-for="item in tagList.General" :key="item.index">{{ item.name }}</a-radio-button>
                 </a-radio-group>
             </a-tab-pane>
             <a-tab-pane tab="全部类型" key="1" >
-                <a-radio-group defaultValue="a" buttonStyle="solid">
+                <a-radio-group buttonStyle="solid" @change="chooseTag">
                     <a-radio-button :value="item.value" class="item" v-for="item in tagList.Category" :key="item.index">{{ item.name }}</a-radio-button>
                 </a-radio-group>
             </a-tab-pane>
             <a-tab-pane tab="全部年代" key="2">
-                <a-radio-group defaultValue="a" buttonStyle="solid">
+                <a-radio-group buttonStyle="solid" @change="chooseTag">
                     <a-radio-button :value="item.value" class="item" v-for="item in tagList.Decade" :key="item.index">{{ item.name }}</a-radio-button>
                 </a-radio-group>
             </a-tab-pane>
             <a-tab-pane tab="全部地区" key="3">
-                <a-radio-group defaultValue="a" buttonStyle="solid">
+                <a-radio-group buttonStyle="solid" @change="chooseTag">
                     <a-radio-button :value="item.value" class="item" v-for="item in tagList.Region" :key="item.index">{{ item.name }}</a-radio-button>
                 </a-radio-group>
             </a-tab-pane>
@@ -26,11 +26,29 @@
     </div>
 </template>
 <script>
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
     name: 'tagSelector',
     props: {
         tagList: {
             type: Object
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'currentTag'
+        ])
+    },
+    methods: {
+        ...mapMutations([
+            'set_currentTag'
+        ]),
+        ...mapActions([
+            'getMovieList'
+        ]),
+        chooseTag(v) {
+            this.set_currentTag(v.target.value)
+            this.getMovieList()
         }
     }
 }

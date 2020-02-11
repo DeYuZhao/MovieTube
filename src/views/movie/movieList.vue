@@ -1,10 +1,10 @@
 <template>
   <div class="movieList">
-    <Header></Header>
+    <!-- <Header></Header> -->
     <a-divider></a-divider>
     <a-layout>
       <a-spin :spinning="!movieList.content">
-        <a-layout-content>
+        <a-layout-content style="min-width: 800px">
           <TagSelector :tagList="tagList"></TagSelector>
           <div class="card-wrapper">
             <MovieCard :movie="item" v-for="item in movieList.content" :key="item.index" @click.native="jumpToDetails(item.id)"></MovieCard>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import Header from '@/components/header'
+// import Header from '@/components/header'
 import MovieCard from './components/movieCard'
 import TagSelector from './components/tagSelector'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
@@ -48,7 +48,7 @@ const data = [
 export default {
   name: 'home',
   components: {
-    Header,
+    // Header,  
     MovieCard,
     TagSelector
   },
@@ -65,7 +65,8 @@ export default {
     ...mapGetters([
       'movieList',
       'tagList',
-      'token'
+      'token',
+      'currentTag'
     ])
   },
   methods: {
@@ -73,7 +74,8 @@ export default {
       'set_movieListParams'
     ]),
     ...mapActions([
-      'getTagsMap'
+      'getTagsMap',
+      'getMovieList'
     ]),
 
     pageChange(page, pageSize) {
@@ -84,7 +86,7 @@ export default {
       this.getMovieList()
     },
     jumpToDetails(id){
-      this.$router.push({ name: 'movie', params: { movieId: id }})
+      this.$router.push({ name: 'movieDetail', params: { movieId: id }, query: { tag: this.currentTag }})
     }
   }
 }

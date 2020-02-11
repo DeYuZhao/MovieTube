@@ -13,6 +13,7 @@ export function getMovieListAPI(params){
 }
 
 export function getByMovieIdAPI(params){
+    console.log(typeof(params.movieId))
     return axios({
         url: `${api.moviePre}/getByMovieId`,
         method: 'GET',

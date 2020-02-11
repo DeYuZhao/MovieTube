@@ -1,23 +1,46 @@
 import Vue from 'vue'
 import router from '@/router'
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import { resetRouter } from '@/router'
+import { message } from 'ant-design-vue'
 import {
     loginAPI,
     registerAPI,
     getUserInfoAPI
 } from '@/api/user'
 
+const getDefaultState = () => {
+    return {
+        token: getToken(),
+        name: '',
+        userId: '',
+        userInfo: {
+
+        }
+    }
+}
 
 const user = {
-    state: {
-        token:'',
-        name:'',
-        welcome:'',
-        info: {}
-    },
+    state : getDefaultState(),
 
     mutations: {
+        reset_state: (state) => {
+            Object.assign(state, getDefaultState)
+        },
         set_token: function(state, token){
             state.token = token
+        },
+        set_name : function(state, data){
+            state.name = data
+        },
+        set_userId: (state, data) => {
+            state.userId = data
+        },
+        set_userInfo: (state, data) => {
+            state.userInfo = {
+                ...state.userInfo,
+                ...data
+            }
         }
     },
 
@@ -25,12 +48,42 @@ const user = {
         login: async ({ commit }, userData) => {
             const res = await loginAPI(userData)
             if(res){
-                Vue.ls.set('ACCESS_TOKEN', res, 7 * 24 * 60 * 60 * 1000)
+                setToken(res)
+                // Vue.ls.set('ACCESS_TOKEN', res, 7 * 24 * 60 * 60 * 1000)
                 commit('set_token', res)
-
                 router.push('/MovieTube/list')
             }
-        }
+        },
+        getUserInfo({ commit }) {
+            return new Promise((resolve, reject) => {
+              getUserInfoAPI().then(response => {
+                const data = response.data
+                if (!data) {
+                  reject('登录已过期，请重新登录')
+                }
+                const userInfo = data
+                console.log(response.data)
+                // commit('set_userInfo', data)
+                // commit('SET_userId', mobile)
+                resolve(data)
+              }).catch(error => {
+                reject(error)
+              })
+            })
+        },
+        logout: async({ commit }) => {
+            removeToken()
+            // resetRouter()
+            commit('reset_state')
+        },
+          // remove token
+        resetToken({ commit }) {
+            return new Promise(resolve => {
+            removeToken() // must remove  token  first
+            commit('reset_state')
+            resolve()
+            })
+        },
     }
 }
 
