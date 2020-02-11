@@ -1,7 +1,10 @@
 const getters = {
   token: state => state.user.token,
+  userId: state => state.user.userId,
+  userInfo: state => state.user.userInfo,
   movieList: state => state.movie.movieList,
   tagList: state => state.movie.tagList,
+  searchMovieRes: state => state.movie.searchMovieRes,
   searchParams: state => state.movie.searchParams,
   currentMovieId: state => state.movie.currentMovieId,
   currentTag: state => state.movie.currentTag,

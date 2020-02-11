@@ -4,7 +4,6 @@
     <a-spin v-if="commentLoading" class="spin"/>
     <a-list itemLayout="vertical" size="small" :pagination="pagination" :dataSource="commentList" style="padding: 0 20px" v-else>
         <a-list-item slot="renderItem" slot-scope="item" key="item.id">
-
         <a-list-item-meta :description="item.content">
             <a slot="title" v-if="item.fromUsername">{{item.fromUsername}}</a>
             <a slot="title" v-else>

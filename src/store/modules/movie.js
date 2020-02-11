@@ -31,7 +31,10 @@ const movie = {
         searchParams: {
             keyword: '',
             pageNo: 1,
-            pageSize: 12
+            pageSize: 10
+        },
+        searchMovieRes: {
+            totalElements:1
         }
     },
     mutations: {
@@ -60,8 +63,14 @@ const movie = {
             }
         },
         set_searchParams: function(state, data) {
-            state.searchMovieListParams = {
-                ...state.searchMovieListParams,
+            state.searchParams = {
+                ...state.searchParams,
+                ...data
+            }
+        },
+        set_searchMovieRes: function(state, data) {
+            state.searchMovieRes = {
+                ...state.searchMovieRes,
                 ...data
             }
         }
@@ -95,9 +104,9 @@ const movie = {
             }
         },
         searchMovieList: async({ state, commit }) => {
-            const res = await listByKeywordAPI(state.searchMovieListParams)
+            const res = await listByKeywordAPI(state.searchParams)
             if(res){
-                commit('set_movieList', res.content)
+                commit('set_searchMovieRes', res)
             }
         }
     }

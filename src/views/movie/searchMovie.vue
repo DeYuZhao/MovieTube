@@ -1,6 +1,26 @@
 <template>
     <div class="search-wrapper">
-        <h1>搜索{{  }}</h1>
+        <a-divider></a-divider>
+        <h1>搜索    {{ searchParams.keyword }}</h1>
+        <a-list itemLayout="vertical" size="large" :pagination="{ total: searchMovieRes.totalElements, pageSize: 10, onChange: this.changePage }" :dataSource="searchMovieRes.content">
+            <a-list-item slot="renderItem" slot-scope="item" key="item.title">
+            <a-list-item-meta>
+                <a slot="title" :href="item.href">{{item.title}}</a>
+                <img slot="avatar" :src="item.cover" referrerPolicy="no-referrer" style="width: 100px"/>
+                <div slot="description">
+                    <a-rate style="font-size: 15px" :value="item.rate/2" disabled allowHalf/> {{item.rate}}分
+                    <div style="margin-top: 10px">
+                        <span>导演：</span>
+                        <span v-for="director in item.directors" :key="director.index">{{ director }}</span>
+                    </div>
+                    <div class="casts">
+                        <span>主演：</span>
+                        <span v-for="cast in item.casts" :key="cast.index">{{ cast }}</span>
+                    </div>
+                </div>
+            </a-list-item-meta>
+            </a-list-item>
+        </a-list>
     </div>
 </template>
 <script>
@@ -9,31 +29,62 @@ export default {
     name: 'searchMovie',
     data() {
         return {
-
+            
         }
     },
     components: {
     },
     computed: {
         ...mapGetters([
-
+            'searchParams',
+            'searchMovieRes'
         ])
     },
+    beforeRouteUpdate(to, from ,next) {
+        this.set_searchParams({
+                keyword: to.query.keyword
+            })
+        this.searchMovieList()
+        next()
+    },
+    beforeRouteLeave (to, from ,next) {
+        this.set_searchParams({
+            keyword: ''
+        })
+        next()
+    },
     mounted() {
-
+        this.set_searchParams({
+                keyword: this.$route.query.keyword
+            })
+        this.searchMovieList()
     },
     methods: {
         ...mapMutations([
-
+            'set_searchParams'
         ]),
         ...mapActions([
-
-        ])
+            'searchMovieList'
+        ]),
+        changePage(page, pageSize) {
+            this.set_searchParams({
+                pageNo: page,
+                pageSize: pageSize
+            }),
+            this.searchMovieList()
+        }
     }
 }
 </script>
 <style scoped lang="less">
     .search-wrapper {
-
+        min-height: 600px;
+        padding: 0 50px;
+        .casts {
+            margin-top: 10px;
+            span {
+                margin-right: 10px
+            }
+        }
     }
 </style>

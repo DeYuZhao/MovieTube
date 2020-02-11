@@ -4,6 +4,7 @@ import { VueAxios } from './axios'
 import {notification} from 'ant-design-vue'
 import store from '@/store'
 import { getToken } from './auth'
+import router from '../router'
 
 // 创建 axios 实例
 const service = axios.create({
@@ -42,7 +43,7 @@ const service = axios.create({
 //request incerceptor
 service.interceptors.request.use((config) => {
   if (store.getters.token) {
-    config.headers['Access-Token'] = getToken() // 让每个请求携带自定义 token 请根据实际情况自行修改
+    config.headers['Authorization'] = getToken()
   }
   const requestConfig = {
     ...config,
@@ -68,9 +69,7 @@ service.interceptors.response.use((response) => {
       break
     case 404:
       return false
-    case 401: 
-      window.location.href="localhost:8080/MovieTube/user/login"
-      break
+
     default:
       if(response.data.message){
         notification.warning({

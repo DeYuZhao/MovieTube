@@ -3,7 +3,7 @@
         <div class="label">
             <img src="@/assets/logo.svg" class="logo" alt="logo">
             <span class="title">Movie Tube</span>
-            <a-input-search class="search" aria-placeholder="搜索电影..." size="large" @search="onSearch" enterButton></a-input-search>
+            <a-input-search class="search" aria-placeholder="搜索电影..." size="large" v-model="searchParams.keyword" @search="onSearch" enterButton></a-input-search>
         </div>
         <div class="logout">
             <a-dropdown placement="bottomCenter">
@@ -19,7 +19,7 @@
                     <a-icon type="profile"></a-icon>
                     我的信息
                 </a-menu-item>
-                <a-menu-item>
+                <a-menu-item @click="quit()">
                     <a-icon type="poweroff"></a-icon>
                     退出登录
                 </a-menu-item>
@@ -31,7 +31,7 @@
     
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
     name: '',
     data() {
@@ -41,14 +41,30 @@ export default {
     },
     computed: {
         ...mapGetters([
+            'searchParams'
         ])
     },
+    mounted() {
+        
+        },
     methods: {
+        ...mapMutations([
+            'set_searchParams'
+        ]),
         ...mapActions([
-            'searchMovieList'
+            'searchMovieList',
+            'logout'
         ]),
         onSearch(v) {
-            this.$router.push({ name: 'search', query: { keyword: v } })
+            if(this.$route.query.keyword === v){
+                
+            }else{
+                this.$router.push({ name: 'search', query: { keyword: v } })
+            }
+        },
+        async quit() {
+            await this.$store.dispatch('logout')
+            this.$router.push(`/login?redirect=${this.$route.fullPath}`)
         }
     }
 }

@@ -9,7 +9,7 @@
     <a-tooltip :title="movie.title" placement="top">
       <a-card-meta :title="movie.title">
       <template slot="description">
-        <a-rate style="font-size: 15px" :value="movie.rate/2" disabled/> {{movie.rate}}分
+        <a-rate style="font-size: 15px" :value="movie.rate/2" disabled allowHalf/> {{movie.rate}}分
       </template>
     </a-card-meta>
     </a-tooltip>
@@ -31,6 +31,7 @@ export default {
 <style scoped lang="less">
     .movieCard {
         margin: 10px 10px;
+        min-width: 180px;
         img {
           height: 250px;
         }

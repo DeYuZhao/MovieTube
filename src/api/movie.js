@@ -29,26 +29,11 @@ export function getCountOfMoviesAPI(params){
         params
     })
 }
-//根据演员姓名搜索
-export function listByCastNameAPI(params){
-    return axios({
-        url: `${api.moviePre}/listByCastName`,
-        method: 'GET',
-        params
-    })
-}
-//根据导演姓名搜索
+
+//搜索
 export function listByKeywordAPI(params){
     return axios({
-        url: `${api.moviePre}/listByKeyword`,
-        method: 'GET',
-        params
-    })
-}
-//根据电影名称搜索
-export function listByMovieName(params){
-    return axios({
-        url: `${api.moviePre}/listByMovieName`,
+        url: `${api.moviePre}/searchByKeyword`,
         method: 'GET',
         params
     })

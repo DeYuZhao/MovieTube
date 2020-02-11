@@ -57,6 +57,7 @@
               size="large"
               type="primary"
               class="login-button"
+              :loading="loading"
               @click="handlelogin()"
             >确定</a-button>
           </a-form-item>
@@ -83,6 +84,7 @@
               size="large"
               type="primary"
               class="login-button"
+              
               @click="handleRegister()"
             >确定</a-button>
           </a-form-item>
@@ -125,6 +127,7 @@ export default {
   data () {
     return {
       customActiveKey: 'tab1',
+      loading: false,
       isLoginError: false,
       stepCaptchaVisible: false,
       form: this.$form.createForm(this),
@@ -136,18 +139,21 @@ export default {
     ])
   },
   mounted() {
-    this.init()
+
+  },
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    },
   },
   methods: {
     ...mapActions([
       'login'
       ]),
 
-      init() {
-        if(this.token){
-          this.$router.push('/movie/list')
-        }
-      },
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       
@@ -156,11 +162,14 @@ export default {
       this.customActiveKey = key
     },
     handlelogin() {
+      this.loading = true
       const data = {
         username: this.form.getFieldValue("username"),
         password: this.form.getFieldValue("password")
       }
-      this.login(data)
+      this.login(data).then(()=>{
+        this.$router.push({ path: this.redirect || '/' })
+      })
     }
   }
 }
