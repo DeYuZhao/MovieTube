@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { VueAxios } from './axios'
-import {notification} from 'ant-design-vue'
+import {notification, message} from 'ant-design-vue'
 import store from '@/store'
 import { getToken } from './auth'
 import router from '../router'
@@ -54,6 +54,7 @@ service.interceptors.request.use((config) => {
 }, err)
 
 service.interceptors.response.use((response) => {
+  console.log(response)
   switch (response.status) {
     case 200:
       switch (response.data.returnCode) {
@@ -61,20 +62,15 @@ service.interceptors.response.use((response) => {
           return response.data.data
         default:
           if(response.data.message){
-            notification.warning({
-              message: response.data.message
-            })
+            message.error(response.data.message)
           }
       }
       break
     case 404:
       return false
-
     default:
       if(response.data.message){
-        notification.warning({
-          message: response.data.message
-        })
+        message.error(response.data.message)
       }
   }
 })

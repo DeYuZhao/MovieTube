@@ -3,7 +3,7 @@ import {
     getByMovieIdAPI,
     getCountOfMoviesAPI,
     listByCastNameAPI,
-    listByKeywordAPI,
+    searchByKeywordAPI,
     listByMovieName
 } from '@/api/movie'
 
@@ -20,9 +20,10 @@ const movie = {
         },
         movieListParams: {
             tag: 'hot',
-            pageNo: 1,
+            pageNo: 0,
             pageSize: 12
         },
+        movieListLoading: false,
         currentTag: 'hot',
         currentMovieId: '',
         currentMovieInfo: {
@@ -30,11 +31,11 @@ const movie = {
         },
         searchParams: {
             keyword: '',
-            pageNo: 1,
+            pageNo: 0,
             pageSize: 10
         },
         searchMovieRes: {
-            totalElements:1
+            totalElements: 1
         }
     },
     mutations: {
@@ -49,6 +50,9 @@ const movie = {
                 ...state.movieListParams,
                 ...data
             }
+        },
+        set_movieListLoading: function(state, data) {
+            state.movieListLoading = data
         },
         set_currentTag: function(state, data) {
             state.currentTag = data
@@ -85,6 +89,7 @@ const movie = {
             const res = await getMovieListAPI(state.movieListParams)
             if(res){
                 commit('set_movieList', res)
+                commit('set_movieListLoading', false)
             }
         },
         getByMovieId: async({commit, state}) => {
@@ -104,7 +109,7 @@ const movie = {
             }
         },
         searchMovieList: async({ state, commit }) => {
-            const res = await listByKeywordAPI(state.searchParams)
+            const res = await searchByKeywordAPI(state.searchParams)
             if(res){
                 commit('set_searchMovieRes', res)
             }

@@ -5,10 +5,10 @@
         <a-list itemLayout="vertical" size="large" :pagination="{ total: searchMovieRes.totalElements, pageSize: 10, onChange: this.changePage }" :dataSource="searchMovieRes.content">
             <a-list-item slot="renderItem" slot-scope="item" key="item.title">
             <a-list-item-meta>
-                <a slot="title" :href="item.href">{{item.title}}</a>
+                <router-link slot="title" :to="{ name: 'movieDetail', params: { movieId: item.id }, query: { tag: currentTag } }">{{item.title}}</router-link>
                 <img slot="avatar" :src="item.cover" referrerPolicy="no-referrer" style="width: 100px"/>
                 <div slot="description">
-                    <a-rate style="font-size: 15px" :value="item.rate/2" disabled allowHalf/> {{item.rate}}分
+                    <a-rate style="font-size: 15px" :value="item.star/10" disabled allowHalf/> {{item.doubanRate}}分
                     <div style="margin-top: 10px">
                         <span>导演：</span>
                         <span v-for="director in item.directors" :key="director.index">{{ director }}</span>
@@ -37,7 +37,8 @@ export default {
     computed: {
         ...mapGetters([
             'searchParams',
-            'searchMovieRes'
+            'searchMovieRes',
+            'currentTag'
         ])
     },
     beforeRouteUpdate(to, from ,next) {
@@ -49,7 +50,8 @@ export default {
     },
     beforeRouteLeave (to, from ,next) {
         this.set_searchParams({
-            keyword: ''
+            keyword: '',
+            pageNo: 0
         })
         next()
     },
@@ -68,7 +70,7 @@ export default {
         ]),
         changePage(page, pageSize) {
             this.set_searchParams({
-                pageNo: page,
+                pageNo: page - 1,
                 pageSize: pageSize
             }),
             this.searchMovieList()

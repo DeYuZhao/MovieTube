@@ -1,20 +1,20 @@
 <template>
   <div class="movieList">
-    <!-- <Header></Header> -->
     <a-divider></a-divider>
     <a-layout>
-      <a-spin :spinning="!movieList.content">
+
         <a-layout-content style="min-width: 800px">
           <TagSelector :tagList="tagList"></TagSelector>
-          <div class="card-wrapper">
+          <a-spin :spinning="movieListLoading">
+            <div class="card-wrapper">
             <MovieCard :movie="item" v-for="item in movieList.content" :key="item.index" @click.native="jumpToDetails(item.id)"></MovieCard>
-            <div v-for="item in emptyBox" :key="item.name" class="emptyBox ant-col-xs-8 ant-col-lg-6 ant-col-xxl-4">
+              <div v-for="item in emptyBox" :key="item.name" class="emptyBox ant-col-xs-8 ant-col-lg-6 ant-col-xxl-4">
+              </div>
+            <a-pagination showQuickJumper :total="movieList.totalElements" :defaultCurrent="1" @change="pageChange"></a-pagination>
           </div>
-          <a-pagination showQuickJumper :total="movieList.totalElements" :defaultCurrent="1" @change="pageChange"></a-pagination>
-        </div>
+          </a-spin>
       </a-layout-content>
-       
-      </a-spin>
+
       <a-layout-sider class="right-sider" width="300">
         <h3 :style="{ marginBottom: '16px' }">一周排行榜</h3>
         <a-list :dataSource="data">
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-// import Header from '@/components/header'
 import MovieCard from './components/movieCard'
 import TagSelector from './components/tagSelector'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
@@ -48,7 +47,6 @@ const data = [
 export default {
   name: 'home',
   components: {
-    // Header,  
     MovieCard,
     TagSelector
   },
@@ -66,12 +64,14 @@ export default {
       'movieList',
       'tagList',
       'token',
-      'currentTag'
+      'currentTag',
+      'movieListLoading'
     ])
   },
   methods: {
     ...mapMutations([
-      'set_movieListParams'
+      'set_movieListParams',
+      'set_movieListLoading'
     ]),
     ...mapActions([
       'getTagsMap',
@@ -80,9 +80,10 @@ export default {
 
     pageChange(page, pageSize) {
       const data = {
-        pageNo: page
+        pageNo: page - 1
       }
-      this.$store.commit('set_movieListParams', data)
+      this.set_movieListParams(data)
+      this.set_movieListLoading(true)
       this.getMovieList()
     },
     jumpToDetails(id){
@@ -103,6 +104,7 @@ export default {
       justify-content: space-around;
       flex-wrap: wrap;
       flex-grow: 3;
+      min-height: 800px
     }
     .card-wrapper .card-item {
       margin: 30px;

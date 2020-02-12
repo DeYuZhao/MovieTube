@@ -3,6 +3,7 @@ const getters = {
   userId: state => state.user.userId,
   userInfo: state => state.user.userInfo,
   movieList: state => state.movie.movieList,
+  movieListLoading: state => state.movie.movieListLoading,
   tagList: state => state.movie.tagList,
   searchMovieRes: state => state.movie.searchMovieRes,
   searchParams: state => state.movie.searchParams,

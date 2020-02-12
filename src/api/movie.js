@@ -1,7 +1,7 @@
 import { axios } from '@/utils/request'
 
 const api = {
-    moviePre: 'api/movieTag',
+    moviePre: 'api/movie',
 }
 
 export function getMovieListAPI(params){
@@ -13,7 +13,6 @@ export function getMovieListAPI(params){
 }
 
 export function getByMovieIdAPI(params){
-    console.log(typeof(params.movieId))
     return axios({
         url: `${api.moviePre}/getByMovieId`,
         method: 'GET',
@@ -31,7 +30,7 @@ export function getCountOfMoviesAPI(params){
 }
 
 //搜索
-export function listByKeywordAPI(params){
+export function searchByKeywordAPI(params){
     return axios({
         url: `${api.moviePre}/searchByKeyword`,
         method: 'GET',

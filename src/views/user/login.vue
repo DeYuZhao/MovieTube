@@ -23,7 +23,7 @@
         @change="handleTabClick"
       >
         <a-tab-pane key="tab1" tab="账号密码登录">
-          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/ant.design )" />
+          <!-- <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" /> -->
           <a-form-item>
             <a-input
               size="large"
@@ -43,7 +43,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码: admin or ant.design"
+              placeholder="密码"
               v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -57,7 +57,7 @@
               size="large"
               type="primary"
               class="login-button"
-              :loading="loading"
+              :loading="loginLoading"
               @click="handlelogin()"
             >确定</a-button>
           </a-form-item>
@@ -65,17 +65,44 @@
 
         <a-tab-pane key="tab2" tab="注册新账号">
           <a-form-item>
-            <a-input size="large" type="email" placeholder="邮箱" v-decorator="['registerUserMail', {rules: [{ required: true, message: '请输入帐户名或邮箱地址'}], validateTrigger: 'blur'}]">
-              <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            <a-input 
+              size="large"
+              placeholder="用户名"
+              v-decorator="['registerUsername', {rules: [{ required: true, message: '请输入用户名'}], validateTrigger: 'blur'}]">
+              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
           <a-form-item>
-            <a-input size="large" type="password" placeholder="密码" v-decorator="['registerPassword', {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}]">
+            <a-input
+              size="large"
+              type="email"
+              placeholder="邮箱"
+              v-decorator="[
+              'registerUserMail', 
+              {rules: [{ required: true, type: 'email', message: '请输入邮箱' }], validateTrigger: 'blur'}]">
+              <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input>
+          </a-form-item>
+          
+          <a-form-item>
+            <a-input
+              size="large"
+              type="password"
+              placeholder="密码"
+              v-decorator="[
+                'registerPassword', 
+                {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePassword }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
           <a-form-item>
-            <a-input size="large" type="password" placeholder="确认密码" v-decorator="['registerPasswordconfirm', {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}]">
+            <a-input
+              size="large"
+              type="password"
+              placeholder="确认密码"
+              v-decorator="[
+                'registerPasswordconfirm', 
+                {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePasswordCheck }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -84,33 +111,12 @@
               size="large"
               type="primary"
               class="login-button"
-              
+              :loading="registerLoading"
               @click="handleRegister()"
             >确定</a-button>
           </a-form-item>
         </a-tab-pane>
       </a-tabs>
-
-
-      
-
-      <div class="user-login-other">
-        <span>其他登录方式</span>
-        <a>
-          <a-icon class="item-icon" type="alipay-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="taobao-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="weibo-circle"></a-icon>
-        </a>
-        <a
-          
-          class="forge-password"
-          style="float: right;"
-        >忘记密码</a>
-      </div>
     </a-form>
 
   </div>
@@ -127,9 +133,8 @@ export default {
   data () {
     return {
       customActiveKey: 'tab1',
-      loading: false,
-      isLoginError: false,
-      stepCaptchaVisible: false,
+      loginLoading: false,
+      registerLoading: false,
       form: this.$form.createForm(this),
     }
   },
@@ -151,25 +156,92 @@ export default {
   },
   methods: {
     ...mapActions([
-      'login'
+      'login',
+      'register'
       ]),
 
     // handler
     handleUsernameOrEmail (rule, value, callback) {
-      
+      const { state } = this
+      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
+      if (regex.test(value)) {
+        callback()
+      } else {
+        callback(new Error('请输入有效用户名或邮箱'))
+      }
+      callback()
+    },
+    checkEmail(rule, value, callback) {
+        const re = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
+        if (re.test(value)) {
+            callback();
+        } else {
+            callback(new Error('请输入有效邮箱'));
+        }
+        callback()
+    },
+    handlePassword(rule, value, callback) {
+      if (value.length < 6) {
+        callback(new Error('密码长度至少6位'))
+      }
+      callback()
+    },
+    handlePasswordCheck (rule, value, callback) {
+      const password = this.form.getFieldValue('registerPassword')
+      console.log(password)
+      if (value === undefined) {
+        callback(new Error('请输入密码'))
+      }
+      if (value && password && value.trim() !== password.trim()) {
+        callback(new Error('两次密码不一致'))
+      }
+      callback()
     },
     handleTabClick (key) {
       this.customActiveKey = key
     },
     handlelogin() {
-      this.loading = true
-      const data = {
-        username: this.form.getFieldValue("username"),
-        password: this.form.getFieldValue("password")
-      }
-      this.login(data).then(()=>{
-        this.$router.push({ path: this.redirect || '/' })
+      const validateFieldsKey = this.customActiveKey === 'tab1' ? ['username', 'password'] : ['registerUsername', 'registerUserMail','registerPassword','registerPasswordconfirm']
+      this.form.validateFields(validateFieldsKey, { force: true }, async (err, values) => {
+        if(!err){
+          this.loginLoading = true
+          const data = {
+            username: this.form.getFieldValue("username"),
+            password: this.form.getFieldValue("password")
+          }
+          await this.login(data).then(()=>{
+            this.$router.push({ path: this.redirect || '/' })
+          })
+          this.loginLoading = false
+        }
       })
+    },
+
+    handleRegister() {
+      const { form: { validateFields } } = this
+      const validateFieldsKey = this.customActiveKey === 'tab1' ? ['username', 'password'] : ['registerUsername', 'registerUserMail','registerPassword','registerPasswordconfirm']
+      validateFields(validateFieldsKey, { force: true }, async (err, values) => {
+        if (!err) {
+          this.registerLoading = true
+          const data = {
+            username: this.form.getFieldValue('registerUsername'),
+            email: this.form.getFieldValue('registerUserMail'),
+            gender: '男生',
+            password: this.form.getFieldValue('registerPassword'),
+            confirmPassword: this.form.getFieldValue('registerPasswordconfirm')
+          }
+          await this.register(data).then(() => {
+            this.customActiveKey = 'tab1'
+            this.form.setFieldsValue({
+              'registerUsername': '',
+              'registerUserMail': '',
+              'registerPassword': '',
+              'registerPasswordconfirm': ''
+            })
+          })
+          this.registerLoading = false
+        }
+      });
     }
   }
 }

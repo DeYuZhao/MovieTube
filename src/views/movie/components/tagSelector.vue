@@ -36,17 +36,20 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'currentTag'
+            'currentTag',
+            'movieListLoading'
         ])
     },
     methods: {
         ...mapMutations([
-            'set_currentTag'
+            'set_currentTag',
+            'set_movieListLoading'
         ]),
         ...mapActions([
             'getMovieList'
         ]),
         chooseTag(v) {
+            this.set_movieListLoading(true)
             this.set_currentTag(v.target.value)
             this.getMovieList()
         }

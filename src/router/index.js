@@ -35,7 +35,8 @@ const routes = [
         component: () => import('@/views/movie/searchMovie')
       },
       {
-        path: '/user/info',
+        path: '/user/info/:userId',
+        name: 'info',
         component: () => import('@/views/user/info')
       }
     ]

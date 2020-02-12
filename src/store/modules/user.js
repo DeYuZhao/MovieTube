@@ -54,6 +54,12 @@ const user = {
                 commit('set_token', res)
             }
         },
+        register: async({ commit }, data) => {
+            const res = await registerAPI(data)
+            if(res){
+                message.success('注册成功')
+            }
+        },
         getUserInfo({ commit }) {
             return new Promise((resolve, reject) => {
               getUserInfoAPI().then(response => {
