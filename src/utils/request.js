@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { VueAxios } from './axios'
-import {notification} from 'ant-design-vue'
+import {notification, message} from 'ant-design-vue'
 import store from '@/store'
+import { getToken } from './auth'
+import router from '../router'
 
 // 创建 axios 实例
 const service = axios.create({
@@ -40,9 +42,8 @@ const service = axios.create({
 
 //request incerceptor
 service.interceptors.request.use((config) => {
-  const token = Vue.ls.get('ACCESS_TOKEN')
-  if (token) {
-    config.headers['Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
+  if (store.getters.token) {
+    config.headers['Authorization'] = getToken()
   }
   const requestConfig = {
     ...config,
@@ -53,17 +54,15 @@ service.interceptors.request.use((config) => {
 }, err)
 
 service.interceptors.response.use((response) => {
+  console.log(response)
   switch (response.status) {
     case 200:
       switch (response.data.returnCode) {
         case 200:
           return response.data.data
-        
         default:
           if(response.data.message){
-            notification.warning({
-              message: response.data.message
-            })
+            message.error(response.data.message)
           }
       }
       break
@@ -71,9 +70,7 @@ service.interceptors.response.use((response) => {
       return false
     default:
       if(response.data.message){
-        notification.warning({
-          message: response.data.message
-        })
+        message.error(response.data.message)
       }
   }
 })

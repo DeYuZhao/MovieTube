@@ -1,24 +1,49 @@
 import {
     getMovieListAPI,
-    getByMovieIdAPI
+    getByMovieIdAPI,
+    getCountOfMoviesAPI,
+    listByCastNameAPI,
+    searchByKeywordAPI,
+    listByMovieName
 } from '@/api/movie'
 
+import {
+    getTagsMapAPI
+} from '@/api/tag'
 const movie = {
     state: {
         movieList: {
 
         },
-        
-        movieListParams: {
-            pageNo: 1,
-            pageSize: 20
-        },
+        tagList: {
 
-        currentMovieId: ''
+        },
+        movieListParams: {
+            tag: 'hot',
+            pageNo: 0,
+            pageSize: 12
+        },
+        movieListLoading: false,
+        currentTag: 'hot',
+        currentMovieId: '',
+        currentMovieInfo: {
+
+        },
+        searchParams: {
+            keyword: '',
+            pageNo: 0,
+            pageSize: 10
+        },
+        searchMovieRes: {
+            totalElements: 1
+        }
     },
     mutations: {
         set_movieList: function(state, data) {
             state.movieList = data
+        },
+        set_tagList: function(state, data) {
+            state.tagList = data
         },
         set_movieListParams: function(state, data) {
             state.movieListParams = {
@@ -26,21 +51,67 @@ const movie = {
                 ...data
             }
         },
+        set_movieListLoading: function(state, data) {
+            state.movieListLoading = data
+        },
+        set_currentTag: function(state, data) {
+            state.currentTag = data
+        },
+        set_currentMovieId: function(state, data) {
+            state.currentMovieId = data
+        },
+        set_currentMovieInfo: function(state, data) {
+            state.currentMovieInfo = {
+                ...state.currentMovieInfo,
+                ...data
+            }
+        },
+        set_searchParams: function(state, data) {
+            state.searchParams = {
+                ...state.searchParams,
+                ...data
+            }
+        },
+        set_searchMovieRes: function(state, data) {
+            state.searchMovieRes = {
+                ...state.searchMovieRes,
+                ...data
+            }
+        }
         
     },
 
     actions: {
         getMovieList: async({commit, state}) => {
+            commit('set_movieListParams',{
+                tag: state.currentTag
+            })
             const res = await getMovieListAPI(state.movieListParams)
             if(res){
                 commit('set_movieList', res)
-                console.log(res.content)
+                commit('set_movieListLoading', false)
             }
         },
         getByMovieId: async({commit, state}) => {
-            const res = await getByMovieIdAPI(state.currentMovieId)
+            const res = await getByMovieIdAPI({
+                movieId: state.currentMovieId,
+                tag: state.currentTag
+            })
             if(res){
-                
+                commit('set_currentMovieInfo', res)
+            }
+        },
+        getTagsMap: async({ commit, state, dispatch }) => {
+            const res = await getTagsMapAPI()
+            if(res){
+                commit('set_tagList', res)
+                dispatch('getMovieList')
+            }
+        },
+        searchMovieList: async({ state, commit }) => {
+            const res = await searchByKeywordAPI(state.searchParams)
+            if(res){
+                commit('set_searchMovieRes', res)
             }
         }
     }
