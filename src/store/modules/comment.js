@@ -78,8 +78,8 @@ const comment = {
         getRootComment: async({ commit }) => {
             const res = await listRootCommentByMovieIdAPI({
                 movieId: store.state.movie.currentMovieId,
-                pageNo: '',
-                pageSize: ''
+                pageNo: 0,
+                pageSize: 10
             })
             if(res){
                 commit('set_commentList', res.content)
@@ -104,7 +104,7 @@ const comment = {
         },
         insertComment: async({ state, commit, dispatch }) => {
             commit('set_newComment',{
-                userId: store.state.user.userId,
+                fromUserId: store.state.user.userId,
                 movieId: store.state.movie.currentMovieId
             })
             const res = await insertCommentAPI(state.newComment)
@@ -119,10 +119,17 @@ const comment = {
         },
         insertReply: async({ state, commit, dispatch }) => {
             commit('set_newReply', {
-                userId: store.state.user.userId,
+                fromUserId: store.state.user.userId,
                 movieId: store.state.movie.currentMovieId
             })
             const res = await insertCommentAPI(state.newReply)
+            if(res){
+                dispatch('getRootComment')
+                commit('set_newReply',{
+                    content: ''
+                })
+                message.success('发表成功')
+            }
         }
     }
 }

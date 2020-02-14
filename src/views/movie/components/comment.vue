@@ -5,7 +5,11 @@
     <a-list itemLayout="vertical" size="small" :pagination="pagination" :dataSource="commentList" style="padding: 0 20px" v-else>
         <a-list-item slot="renderItem" slot-scope="item" key="item.id">
         <a-list-item-meta :description="item.content">
-            <a slot="title" v-if="item.fromUsername">{{item.fromUsername}}</a>
+            <div slot="title" v-if="item.fromUsername" style="display: flex; align-items: center; justify-content: space-between">
+              <a>{{ item.fromUsername}}</a>
+              <a-button type="link" @click="cancelReplyToComment(item)" v-if="item.newReply">取消回复</a-button>
+              <a-button type="link" @click="showReplyToComment(item)" v-else>回复</a-button>
+            </div>
             <a slot="title" v-else>
               <div slot="title" style="display: flex; align-items: center; justify-content: space-between">
                 <a>用户</a>
@@ -38,7 +42,7 @@
             </div>
             </a-list-item>
           </a-list>
-          <a-button type="link" style="padding: 0 45px" v-if="item.totalReplyCommentCount > 1" @click="showMoreReply(item)">查看全部{{ item.totalReplyCommentCount }}条回复</a-button>
+          <a-button type="link" style="padding: 0 45px" v-if="item.totalReplyCommentCount > 2" @click="showMoreReply(item)">查看全部{{ item.totalReplyCommentCount }}条回复</a-button>
           <div class="write-comment" v-if="item.newReply">
             <a-input type="textarea" placeholder="请写下你的回复" :rows="1" v-model="item.newReply.content"></a-input>
             <a-button type="primary" @click="insertNewReply(item)">发表</a-button>
