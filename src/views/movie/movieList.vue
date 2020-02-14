@@ -2,7 +2,6 @@
   <div class="movieList">
     <a-divider></a-divider>
     <a-layout>
-
         <a-layout-content style="min-width: 800px">
           <TagSelector :tagList="tagList"></TagSelector>
           <a-spin :spinning="movieListLoading">
@@ -14,50 +13,33 @@
           </div>
           </a-spin>
       </a-layout-content>
-
-      <a-layout-sider class="right-sider" width="300">
-        <h3 :style="{ marginBottom: '16px' }">一周排行榜</h3>
-        <a-list :dataSource="data">
-          <a-list-item></a-list-item>
-          <a-list-item slot="renderItem" slot-scope="item">{{ item }}</a-list-item>
-        </a-list>
-      </a-layout-sider>
+      <div>
+        <Order :type="1"></Order>
+        <Order :type="2"></Order>
+      </div>
     </a-layout>
-    <a-row>
-    </a-row>
   </div>
 </template>
-
 <script>
 import MovieCard from './components/movieCard'
 import TagSelector from './components/tagSelector'
+import Order from './components/order'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-  ];
+
 export default {
   name: 'home',
   components: {
     MovieCard,
-    TagSelector
+    TagSelector,
+    Order
   },
   data(){
     return{
-      data: data,
       emptyBox: [{ name: 'box1' }, { name: 'box2'}, {name: 'box3'}, {name:'box4'}]
     }
   },
-  async mounted() {
-    await this.getTagsMap()
+  mounted() {
+    this.getTagsMap()
   },
   computed: {
     ...mapGetters([
@@ -87,7 +69,7 @@ export default {
       this.getMovieList()
     },
     jumpToDetails(id){
-      this.$router.push({ name: 'movieDetail', params: { movieId: id }, query: { tag: this.currentTag }})
+      this.$router.push({ name: 'movieDetail', params: { movieId: id }})
     }
   }
 }
@@ -110,13 +92,6 @@ export default {
       margin: 30px;
       position: relative;
       height: 188px;
-    }
-
-    .right-sider {
-      background: transparent; 
-      text-align: left; 
-      padding: 20px 20px
-      
     }
   }
 </style>

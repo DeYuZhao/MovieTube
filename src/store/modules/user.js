@@ -6,9 +6,14 @@ import { message } from 'ant-design-vue'
 import {
     loginAPI,
     registerAPI,
-    getUserInfoAPI
+    getUserInfoAPI,
+    updateUserInfoByIdAPI
 } from '@/api/user'
 
+import {
+    listUserPostCommentsAPI,
+    listUserReceiveCommentsAPI
+} from '@/api/comment'
 const getDefaultState = () => {
     return {
         token: getToken(),
@@ -16,7 +21,25 @@ const getDefaultState = () => {
         userId: '',
         userInfo: {
 
-        }
+        },
+        postCommentsList: {
+
+        },
+        receiveCommentsList: {
+
+        },
+        postCommentsParams: {
+            userId: '',
+            pageNo: 0,
+            pageSize: 10
+        },
+        recieveCommentsParams: {
+            userId: '',
+            pageNo: 0,
+            pageSize: 10
+        },
+        postLoading: true,
+        receiveLoading: true
     }
 }
 
@@ -42,6 +65,36 @@ const user = {
                 ...state.userInfo,
                 ...data
             }
+        },
+        set_postCommentsList: (state, data) => {
+            state.postCommentsList = {
+                ...state.postCommentsList,
+                ...data
+            }
+        },
+        set_receiveCommentsList: (state, data) => {
+            state.receiveCommentsList = {
+                ...state.receiveCommentsList,
+                ...data
+            }
+        },
+        set_postCommentsParams: (state, data) => {
+            state.postCommentsParams = {
+                ...state.postCommentsParams,
+                ...data
+            }
+        },
+        set_recieveCommentsParams: (state, data) => {
+            state.recieveCommentsParams = {
+                ...state.recieveCommentsParams,
+                ...data
+            }
+        },
+        set_postLoading: (state, data) => {
+            state.postLoading = data
+        },
+        set_receiveLoading: (state, data) => {
+            state.receiveLoading = data
         }
     },
 
@@ -74,6 +127,36 @@ const user = {
                 reject(error)
               })
             })
+        },
+        updateUserInfoById: async({ state, dispatch }, data) => {
+            data.userId = state.userId
+            const res = await updateUserInfoByIdAPI(data)
+            if(res){
+                dispatch('getUserInfo')
+                message.success('修改成功')
+            }else{
+                message.error('修改失败')
+            }
+        },
+        getUserPostComments: async({ state, commit }) => {
+            commit('set_postCommentsParams', {
+                userId: state.userId
+            })
+            const res = await listUserPostCommentsAPI(state.postCommentsParams)
+            if(res){
+                commit('set_postCommentsList', res)
+                commit('set_postLoading', false)
+            }
+        },
+        getUserReceiveComments: async({ state, commit }) => {
+            commit('set_recieveCommentsParams', {
+                userId: state.userId
+            })
+            const res = await listUserReceiveCommentsAPI(state.recieveCommentsParams)
+            if(res){
+                commit('set_receiveCommentsList', res)
+                commit('set_receiveLoading', false)
+            }
         },
         logout: async({ commit }) => {
             removeToken()

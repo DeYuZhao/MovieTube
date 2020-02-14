@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="label">
-            <img src="@/assets/logo.svg" class="logo" alt="logo">
+            <img src="@/assets/logo.svg" class="logo" alt="logo" @click="jumpToMovie">
             <span class="title">Movie Tube</span>
             <a-input-search class="search" aria-placeholder="搜索电影..." size="large" v-model="searchParams.keyword" @search="onSearch" enterButton></a-input-search>
         </div>
@@ -95,6 +95,7 @@ export default {
             vertical-align: top;
             margin-right: 16px;
             border-style: none;
+            cursor: pointer;
           }
 
           .title {

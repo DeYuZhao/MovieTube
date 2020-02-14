@@ -2,14 +2,20 @@ import {
     getMovieListAPI,
     getByMovieIdAPI,
     getCountOfMoviesAPI,
-    listByCastNameAPI,
-    searchByKeywordAPI,
-    listByMovieName
+    searchByKeywordAPI
 } from '@/api/movie'
 
 import {
     getTagsMapAPI
 } from '@/api/tag'
+
+import {
+    insertRateAPI,
+    updateRateByIdAPI
+} from '@/api/rate'
+import { message } from 'ant-design-vue'
+import store from '@/store'
+
 const movie = {
     state: {
         movieList: {
@@ -23,19 +29,30 @@ const movie = {
             pageNo: 0,
             pageSize: 12
         },
-        movieListLoading: false,
+        movieListLoading: true,
         currentTag: 'hot',
         currentMovieId: '',
         currentMovieInfo: {
 
         },
+        recommendMovieList: {
+
+        },
+        koubeiMovieList: {
+
+        },
+        orderLoading: true,
         searchParams: {
             keyword: '',
             pageNo: 0,
-            pageSize: 10
+            pageSize: 8
         },
         searchMovieRes: {
             totalElements: 1
+        },
+        searchLoading: true,
+        rateParams: {
+           rate: 0
         }
     },
     mutations: {
@@ -53,6 +70,21 @@ const movie = {
         },
         set_movieListLoading: function(state, data) {
             state.movieListLoading = data
+        },
+        set_recommendMovieList: function(state, data){
+            state.recommendMovieList = {
+                ...state.recommendMovieList,
+                ...data
+            }
+        },
+        set_koubeiMovieList: function(state, data) {
+            state.koubeiMovieList = {
+                ...state.koubeiMovieList,
+                ...data
+            }
+        },
+        set_orderLoading: function(state, data) {
+            state.orderLoading = data
         },
         set_currentTag: function(state, data) {
             state.currentTag = data
@@ -77,6 +109,15 @@ const movie = {
                 ...state.searchMovieRes,
                 ...data
             }
+        },
+        set_searchLoading: function(state, data) {
+            state.searchLoading = data
+        },
+        set_rateParams: function(state, data) {
+            state.rateParams = {
+                ...state.rateParams,
+                ...data
+            }
         }
         
     },
@@ -92,10 +133,33 @@ const movie = {
                 commit('set_movieListLoading', false)
             }
         },
+        getRecommendMovieList: async({ commit, state }) => {
+            const data = {
+                tag: 'recommend',
+                pageNo: 0,
+                pageSize: 10
+            }
+            const res = await getMovieListAPI(data)
+            if(res){
+                commit('set_recommendMovieList', res)
+                commit('set_orderLoading', false)
+            }
+        },
+        getKoubeiMovieList: async({ commit }) => {
+            const data = {
+                tag: 'recommend',
+                pageNo: 1,
+                pageSize: 10
+            }
+            const res = await getMovieListAPI(data)
+            if(res) {
+                commit('set_koubeiMovieList', res)
+                commit('set_orderLoading', false)
+            }
+        },
         getByMovieId: async({commit, state}) => {
             const res = await getByMovieIdAPI({
-                movieId: state.currentMovieId,
-                tag: state.currentTag
+                movieId: state.currentMovieId
             })
             if(res){
                 commit('set_currentMovieInfo', res)
@@ -109,9 +173,42 @@ const movie = {
             }
         },
         searchMovieList: async({ state, commit }) => {
+            commit('set_searchMovieRes', {
+                content: []
+            })
+            commit('set_searchLoading', true)
             const res = await searchByKeywordAPI(state.searchParams)
             if(res){
                 commit('set_searchMovieRes', res)
+                commit('set_searchLoading', false)
+            }
+        },
+        insertRate: async({ state }) => {
+            const data = {
+                rate: state.rateParams.rate * 2,
+                createTime: '',
+                id: '',
+                userId: store.state.user.userId,
+                updateTime: '',
+                movieId: state.currentMovieId
+            }
+            const res = await insertRateAPI(data)
+            if(res){
+                message.success('成功')
+            }
+        },
+        updateRateById: async({ commit, state}) => {
+            const data = {
+                rate: state.rateParams.rate * 2,
+                createTime: '',
+                id: '',
+                userId: store.state.user.userId,
+                updateTime: '',
+                movieId: state.currentMovieId
+            }
+            const res = await updateRateByIdAPI(state.rateParams)
+            if(res){
+                message.success('成功')
             }
         }
     }

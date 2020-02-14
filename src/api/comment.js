@@ -52,7 +52,7 @@ export function listUserPostCommentsAPI(params){
     })
 }
 //获取用户收到的评论
-export function listUserReceiveComments(params){
+export function listUserReceiveCommentsAPI(params){
     return axios({
         url: `${api.commentPre}/listUserReceiveComments`,
         method: 'GET',

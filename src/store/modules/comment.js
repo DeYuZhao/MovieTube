@@ -4,8 +4,6 @@ import {
     insertCommentAPI,
     listReplyCommentOfRootCommentAPI,
     listRootCommentByMovieIdAPI,
-    listUserPostCommentsAPI,
-    listUserReceiveComments
 } from '@/api/comment'
 import store from '@/store'
 import { message } from 'ant-design-vue'
@@ -24,7 +22,7 @@ const comment = {
         newComment: {
             content: '',
             createTime: '',
-            fromUserId: 1,
+            fromUserId: 0,
             id:'',
             movieId:'',
             parentCommentId: -1,
@@ -34,7 +32,7 @@ const comment = {
         newReply: {
             content: '',
             createTime: '',
-            fromUserId: 1,
+            fromUserId: 0,
             id:'',
             movieId:'',
             parentCommentId: '',
@@ -106,6 +104,7 @@ const comment = {
         },
         insertComment: async({ state, commit, dispatch }) => {
             commit('set_newComment',{
+                userId: store.state.user.userId,
                 movieId: store.state.movie.currentMovieId
             })
             const res = await insertCommentAPI(state.newComment)
@@ -120,6 +119,7 @@ const comment = {
         },
         insertReply: async({ state, commit, dispatch }) => {
             commit('set_newReply', {
+                userId: store.state.user.userId,
                 movieId: store.state.movie.currentMovieId
             })
             const res = await insertCommentAPI(state.newReply)

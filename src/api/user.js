@@ -23,3 +23,10 @@ export function getUserInfoAPI(){
         method: 'GET'
     })
 }
+export function updateUserInfoByIdAPI(data) {
+    return axios({
+        url: `${api.userPre}/updateUserInfoById`,
+        method: 'POST',
+        data
+    })
+}
