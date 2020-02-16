@@ -54,7 +54,6 @@ service.interceptors.request.use((config) => {
 }, err)
 
 service.interceptors.response.use((response) => {
-  console.log(response)
   switch (response.status) {
     case 200:
       switch (response.data.returnCode) {

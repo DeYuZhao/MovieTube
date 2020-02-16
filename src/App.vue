@@ -21,7 +21,6 @@ export default {
   width: 100%;
   padding: 20px 100px 144px;
   background: #f0f2f5 url('assets/background.svg') repeat 100%;
-  height: 100%;
   min-height: 800px
 }
 
