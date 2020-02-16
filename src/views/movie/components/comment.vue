@@ -59,7 +59,7 @@
         <a-list-item-meta :description="moreReply.comment_content">
             <a slot="title" v-if="moreReply.comment_username">{{moreReply.comment_username}}</a>
             <a slot="title" v-else>用户</a>
-            <a-avatar slot="avatar" v-if="moreReply.comment_username">{{ imoreReply.comment_username }}</a-avatar>
+            <a-avatar slot="avatar" v-if="moreReply.comment_username">{{ moreReply.comment_username }}</a-avatar>
             <a-avatar slot="avatar" icon="user" v-else></a-avatar>
         </a-list-item-meta>
         </a-list-item>
