@@ -3,16 +3,9 @@ const api = {
     ratePre: '/api/rate'
 }
 
-export function insertRateAPI(data){
+export function insertOrUpdateRateAPI(data){
     return axios({
-        url: `${api.ratePre}/insertRate`,
-        method: 'POST',
-        data
-    })
-}
-export function updateRateByIdAPI(data) {
-    return axios({
-        url: `${api.ratePre}/updateRateById`,
+        url: `${api.ratePre}/insertOrUpdateRate`,
         method: 'POST',
         data
     })

@@ -30,7 +30,7 @@
                     <span class="value">{{ movieInfo.doubanRate }}</span>
                 </div>
                 <div class="items">
-                    <span class="label">我来打分：</span>
+                    <span class="label">我的打分：</span>
                     <a-rate v-model="rateParams.rate" allowHalf :tooltips="rateDes" @change="change"></a-rate>
                     <span>{{ des }}</span>
                 </div>
@@ -67,8 +67,7 @@ export default {
     },
     methods: {
         ...mapActions([
-            'insertRate',
-            'updateRateById'
+            'insertOrUpdateRate'
         ]),
         hoverChange(v) {
             
@@ -85,7 +84,7 @@ export default {
             }else{
                 this.des = this.rateDes[4]
             }
-            this.insertRate()
+            this.insertOrUpdateRate()
         }
     }
 }
