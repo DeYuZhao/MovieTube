@@ -7,13 +7,18 @@ import {
     loginAPI,
     registerAPI,
     getUserInfoAPI,
-    updateUserInfoByIdAPI
+    updateUserInfoByIdAPI,
 } from '@/api/user'
 
 import {
     listUserPostCommentsAPI,
-    listUserReceiveCommentsAPI
+    listUserReceiveCommentsAPI,
 } from '@/api/comment'
+
+import {
+    getCommentCountBarChartAPI
+} from '@/api/chart'
+
 const getDefaultState = () => {
     return {
         token: getToken(),
@@ -39,7 +44,11 @@ const getDefaultState = () => {
             pageSize: 10
         },
         postLoading: true,
-        receiveLoading: true
+        receiveLoading: true,
+        commentChartData: {
+
+        },
+        commentChartLoading: true
     }
 }
 
@@ -95,6 +104,15 @@ const user = {
         },
         set_receiveLoading: (state, data) => {
             state.receiveLoading = data
+        },
+        set_commentChartData: (state, data) => {
+            state.commentChartData = {
+                ...state.commentChartData,
+                ...data
+            }
+        },
+        set_commentChartLoading: (state, data) => {
+            state.commentChartLoading = data
         }
     },
 
@@ -156,6 +174,16 @@ const user = {
             if(res){
                 commit('set_receiveCommentsList', res)
                 commit('set_receiveLoading', false)
+            }
+        },
+        getCommentCountBarChart: async({ state, commit }) => {
+            const params = {
+                userId: state.userId
+            }
+            const res = await getCommentCountBarChartAPI(params)
+            if(res){
+                commit('set_commentChartData', res)
+                commit('set_commentChartLoading', false)
             }
         },
         logout: async({ commit }) => {

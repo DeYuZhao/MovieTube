@@ -7,6 +7,8 @@ const getters = {
   postLoading: state => state.user.postLoading,
   receiveCommentsList: state => state.user.receiveCommentsList,
   receiveLoading: state => state.user.receiveLoading,
+  commentChartData: state => state.user.commentChartData,
+  commentChartLoading: state => state.user.commentChartLoading,
   //movie
   movieList: state => state.movie.movieList,
   movieListLoading: state => state.movie.movieListLoading,
