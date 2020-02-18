@@ -10,8 +10,7 @@ import {
 } from '@/api/tag'
 
 import {
-    insertRateAPI,
-    updateRateByIdAPI
+    insertOrUpdateRateAPI
 } from '@/api/rate'
 import { message } from 'ant-design-vue'
 import store from '@/store'
@@ -163,9 +162,12 @@ const movie = {
             })
             if(res){
                 commit('set_currentMovieInfo', res)
+                commit('set_rateParams',{
+                    rate: state.currentMovieInfo.myRate/2
+                })
             }
         },
-        getTagsMap: async({ commit, state, dispatch }) => {
+        getTagsMap: async({ commit, dispatch }) => {
             const res = await getTagsMapAPI()
             if(res){
                 commit('set_tagList', res)
@@ -183,34 +185,21 @@ const movie = {
                 commit('set_searchLoading', false)
             }
         },
-        insertRate: async({ state }) => {
+        insertOrUpdateRate: async({ state }) => {
             const data = {
                 rate: state.rateParams.rate * 2,
                 createTime: '',
-                id: '',
+                id: 0,
                 userId: store.state.user.userId,
                 updateTime: '',
                 movieId: state.currentMovieId
             }
-            const res = await insertRateAPI(data)
+            const res = await insertOrUpdateRateAPI(data)
             if(res){
-                message.success('成功')
+                message.success('已提交打分')
             }
         },
-        updateRateById: async({ commit, state}) => {
-            const data = {
-                rate: state.rateParams.rate * 2,
-                createTime: '',
-                id: '',
-                userId: store.state.user.userId,
-                updateTime: '',
-                movieId: state.currentMovieId
-            }
-            const res = await updateRateByIdAPI(state.rateParams)
-            if(res){
-                message.success('成功')
-            }
-        }
+       
     }
 }
 
