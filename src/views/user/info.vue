@@ -78,11 +78,16 @@
                         <a-button type="primary" @click="modifyInfo">
                             修改信息
                         </a-button>
-                        
                     </a-form-item>
                 </a-form>
             </a-tab-pane>
             <a-tab-pane tab="我发表的评论" key="2">
+                <div class="chart">
+                    <bar-chart type="bar" title="评论数柱状图"></bar-chart>
+                    <bar-chart type="line" title="评论数折线图"></bar-chart>
+                </div>
+                <a-divider></a-divider>
+                <h1>详细数据</h1>
                 <a-table
                     rowKey="{record => record.id}"
                     :loading="postLoading"
@@ -113,6 +118,7 @@
 </template>
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
+import BarChart from './components/chart'
 const postCommentsColumns = [
     {
       title: '发表时间',
@@ -184,6 +190,9 @@ export default {
             form: this.$form.createForm(this, { name: 'coordinated' }),
         }
     },
+    components: {
+        BarChart  
+    },
     computed: {
         ...mapGetters([
             'userInfo',
@@ -201,7 +210,8 @@ export default {
         ...mapActions([
             'updateUserInfoById',
             'getUserPostComments',
-            'getUserReceiveComments'
+            'getUserReceiveComments',
+            'getCommentCountBarChart'
         ]),
         saveModify() {
             this.form.validateFields((err, values) => {
@@ -242,7 +252,13 @@ export default {
 </script>
 <style scoped lang="less">
     .info-wrapper {
-        padding: 50px 0 0
+        padding: 50px 0 0;
+        .chart {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px
+        }
     }
 </style>
 <style lang="less">
