@@ -11,10 +11,12 @@ const getters = {
   commentChartLoading: state => state.user.commentChartLoading,
   //movie
   movieList: state => state.movie.movieList,
+  movieListParams: state => state.movie.movieListParams,
   movieListLoading: state => state.movie.movieListLoading,
   recommendMovieList: state => state.movie.recommendMovieList,
   koubeiMovieList: state => state.movie.koubeiMovieList,
   orderLoading: state => state.movie.orderLoading,
+  activeKey: state => state.movie.activeKey,
   tagList: state => state.movie.tagList,
   searchMovieRes: state => state.movie.searchMovieRes,
   searchParams: state => state.movie.searchParams,
@@ -30,7 +32,8 @@ const getters = {
   commentLoading: state => state.comment.commentLoading,
   replyLoading: state => state.comment.replyLoading,
   newComment: state => state.comment.newComment,
-  newReply: state => state.comment.newReply
+  newReply: state => state.comment.newReply,
+  gestureVisible: state => state.user.gestureVisible,
   }
   
   export default getters
