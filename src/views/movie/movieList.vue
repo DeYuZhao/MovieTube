@@ -9,7 +9,7 @@
             <MovieCard :movie="item" v-for="item in movieList.content" :key="item.index" @click.native="jumpToDetails(item.id)"></MovieCard>
               <div v-for="item in emptyBox" :key="item.name" class="emptyBox ant-col-xs-8 ant-col-lg-6 ant-col-xxl-4">
               </div>
-            <a-pagination showQuickJumper :total="movieList.totalElements" :defaultCurrent="1" @change="pageChange"></a-pagination>
+            <a-pagination showQuickJumper :total="movieList.totalElements" :defaultCurrent="1" :current="movieListParams.pageNo+1" @change="pageChange"></a-pagination>
           </div>
           </a-spin>
       </a-layout-content>
@@ -47,7 +47,8 @@ export default {
       'tagList',
       'token',
       'currentTag',
-      'movieListLoading'
+      'movieListLoading',
+      'movieListParams'
     ])
   },
   methods: {
@@ -65,7 +66,6 @@ export default {
         pageNo: page - 1
       }
       this.set_movieListParams(data)
-      this.set_movieListLoading(true)
       this.getMovieList()
     },
     jumpToDetails(id){

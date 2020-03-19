@@ -1,7 +1,6 @@
 import {
     getMovieListAPI,
     getByMovieIdAPI,
-    getCountOfMoviesAPI,
     searchByKeywordAPI
 } from '@/api/movie'
 
@@ -23,6 +22,7 @@ const movie = {
         tagList: {
 
         },
+        activeKey:'0',
         movieListParams: {
             tag: 'hot',
             pageNo: 0,
@@ -57,6 +57,9 @@ const movie = {
     mutations: {
         set_movieList: function(state, data) {
             state.movieList = data
+        },
+        set_activeKey: function(state, data) {
+            state.activeKey = data
         },
         set_tagList: function(state, data) {
             state.tagList = data
@@ -126,6 +129,7 @@ const movie = {
             commit('set_movieListParams',{
                 tag: state.currentTag
             })
+            commit('set_movieListLoading', true)
             const res = await getMovieListAPI(state.movieListParams)
             if(res){
                 commit('set_movieList', res)

@@ -48,7 +48,8 @@ const getDefaultState = () => {
         commentChartData: {
 
         },
-        commentChartLoading: true
+        commentChartLoading: true,
+        gestureVisible: false,
     }
 }
 
@@ -113,7 +114,10 @@ const user = {
         },
         set_commentChartLoading: (state, data) => {
             state.commentChartLoading = data
-        }
+        },
+        set_gestureVisible: function(state, data){
+            state.gestureVisible = data
+          }
     },
 
     actions: {
